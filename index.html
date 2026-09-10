@@ -2,169 +2,154 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bayer Rewards Plus — Live Dashboard</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bayer Rewards Plus</title>
 <style>
-:root{--blue:#003b7a;--blue2:#0065b3;--green:#78be20;--bg:#f4f7fb;--text:#182230;--muted:#6b7785;--card:#fff;--border:#e3e8ef}
+:root{--blue:#003b7a;--blue2:#0065b3;--green:#78be20;--bg:#f4f7fb;--text:#17212b;--muted:#697586;--line:#dfe5ec}
 *{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
-.app{display:flex;min-height:100vh}.side{width:245px;background:linear-gradient(180deg,#003b7a,#005ca8);color:#fff;padding:24px 18px;position:fixed;inset:0 auto 0 0}
-.logo{font-size:23px;font-weight:800;margin:4px 8px 30px}.logo span{color:#78be20}.nav{padding:11px 12px;border-radius:10px;background:rgba(255,255,255,.12);font-weight:700}
-.main{margin-left:245px;width:calc(100% - 245px);padding:25px 30px}
-.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}.title h1{margin:0;font-size:27px}.title p{margin:6px 0 0;color:var(--muted)}
-.live{display:flex;align-items:center;gap:8px;padding:9px 13px;border-radius:20px;background:#fff;border:1px solid var(--border);font-size:12px;font-weight:700}
-.dot{width:9px;height:9px;border-radius:50%;background:#aaa}.live.ok .dot{background:#78be20}.live.err .dot{background:#d93025}
-.filters,.card,.panel{background:var(--card);border:1px solid var(--border);border-radius:14px;box-shadow:0 2px 10px rgba(20,40,70,.04)}
-.filters{padding:14px;display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}.filters select{border:1px solid #d8dee7;border-radius:9px;padding:9px 12px;background:#fff}
-.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-bottom:18px}.card{padding:17px}.kpi-label{color:var(--muted);font-size:12px;font-weight:700;text-transform:uppercase}.kpi{font-size:28px;font-weight:800;margin-top:8px;color:var(--blue)}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px}.panel{padding:18px}.panel h2{font-size:16px;margin:0 0 14px}.chartbox{height:285px;position:relative}
-table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:10px 8px;border-bottom:1px solid #edf0f4}th{color:var(--muted);font-size:11px;text-transform:uppercase}
-.badge{display:inline-block;padding:5px 8px;border-radius:12px;font-size:11px;font-weight:700;background:#edf3f9}.empty{text-align:center;color:var(--muted);padding:35px 10px}
-.insights{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.insight{padding:14px;border-radius:10px;background:#f7f9fc;border-left:4px solid var(--green)}.insight b{display:block;margin-bottom:5px}
-.status{font-size:12px;color:var(--muted);margin-top:8px}
-@media(max-width:900px){.side{width:70px;padding:20px 10px}.logo{font-size:0}.logo span{font-size:22px}.nav{font-size:0}.main{margin-left:70px;width:calc(100% - 70px);padding:18px}.kpis{grid-template-columns:repeat(2,1fr)}.grid,.insights{grid-template-columns:1fr}}
-@media(max-width:560px){.kpis{grid-template-columns:1fr}.top{align-items:flex-start;gap:10px;flex-direction:column}}
+.app{min-height:100vh}.topbar{height:68px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:10}
+.logo{font-weight:900;font-size:21px;color:var(--blue)}.logo span{color:var(--green)}
+.nav button{border:0;background:transparent;padding:10px 15px;border-radius:9px;font-weight:700;cursor:pointer;color:#4c5968}.nav button.active{background:var(--blue);color:#fff}
+.container{max-width:1250px;margin:auto;padding:25px}.page{display:none}.page.active{display:block}
+.head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px}.head h1{margin:0;font-size:27px}.head p{margin:6px 0;color:var(--muted)}
+.live{font-size:12px;font-weight:800;background:#fff;border:1px solid var(--line);border-radius:18px;padding:9px 12px}.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#78be20;margin-right:7px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}.card,.panel{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 2px 10px #183b5d08}.card{padding:17px}.label{font-size:11px;color:var(--muted);font-weight:800;text-transform:uppercase}.num{font-size:29px;color:var(--blue);font-weight:900;margin-top:7px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:17px}.panel{padding:18px;margin-bottom:17px}.panel h2{font-size:16px;margin:0 0 15px}.chart{height:270px;display:flex;align-items:center;justify-content:center;color:var(--muted)}
+.form{max-width:900px;margin:auto}.section{background:#fff;border:1px solid var(--line);border-radius:14px;margin-bottom:15px;padding:20px}.section h2{margin:0 0 4px;color:var(--blue);font-size:18px}.section small{color:var(--muted)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:15px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}label{font-size:13px;font-weight:700}input,select,textarea{font:inherit;border:1px solid #cfd7e1;border-radius:9px;padding:10px 11px;background:#fff}textarea{min-height:85px;resize:vertical}
+.q{padding:14px 0;border-bottom:1px solid #edf0f3}.q:last-child{border-bottom:0}.qtext{font-size:14px;font-weight:700;margin-bottom:10px}.scale{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}.scale label{border:1px solid #d5dce5;border-radius:9px;padding:9px 5px;text-align:center;cursor:pointer;font-weight:700;color:#596575}.scale input{display:none}.scale label:has(input:checked){background:var(--blue);border-color:var(--blue);color:#fff}
+.actions{display:flex;justify-content:flex-end;gap:10px}.btn{border:0;border-radius:9px;padding:11px 18px;font-weight:800;cursor:pointer}.primary{background:var(--blue);color:#fff}.secondary{background:#e9eef4;color:#314154}
+#toast{position:fixed;right:22px;bottom:22px;background:#17212b;color:#fff;padding:13px 17px;border-radius:10px;display:none;z-index:30;max-width:360px}.success{background:#267a2d!important}.error{background:#b52d2d!important}
+.tablewrap{overflow:auto}table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:10px;border-bottom:1px solid #edf0f3}th{font-size:11px;color:var(--muted);text-transform:uppercase}
+@media(max-width:800px){.kpis,.grid,.row{grid-template-columns:1fr}.topbar{padding:0 13px}.container{padding:15px}.nav button{padding:8px}.head{flex-direction:column;gap:10px}}
 </style>
 </head>
 <body>
 <div class="app">
-<aside class="side"><div class="logo">BAYER <span>REWARDS+</span></div><div class="nav">Dashboard</div></aside>
-<main class="main">
-  <div class="top">
-    <div class="title"><h1>Rewards Plus — Live Dashboard</h1><p>Analisis partisipasi retailer Kabupaten Nganjuk · Territory Kediri</p></div>
-    <div id="live" class="live"><span class="dot"></span><span id="liveText">CONNECTING...</span></div>
+<header class="topbar">
+ <div class="logo">BAYER <span>REWARDS+</span></div>
+ <nav class="nav">
+  <button id="dashBtn" class="active" onclick="showPage('dashboard')">📊 Dashboard</button>
+  <button id="inputBtn" onclick="showPage('input')">📝 Input Response</button>
+ </nav>
+</header>
+
+<main class="container">
+<section id="dashboard" class="page active">
+ <div class="head"><div><h1>Rewards Plus — Live Dashboard</h1><p>Analisis partisipasi retailer Kabupaten Nganjuk · Territory Kediri</p></div><div class="live"><span class="dot"></span><span id="connection">CONNECTING...</span></div></div>
+ <div class="kpis">
+  <div class="card"><div class="label">Total Retailer</div><div id="total" class="num">0</div></div>
+  <div class="card"><div class="label">Aktif & Rutin Scan</div><div id="active" class="num">0</div></div>
+  <div class="card"><div class="label">Terdaftar tapi Pasif</div><div id="inactive" class="num">0</div></div>
+  <div class="card"><div class="label">Belum Terdaftar</div><div id="unreg" class="num">0</div></div>
+ </div>
+ <div class="grid">
+  <div class="panel"><h2>Ringkasan Faktor Q1–Q10</h2><div id="factors" class="chart">Belum ada data.</div></div>
+  <div class="panel"><h2>Partisipasi Retailer</h2><div id="participation" class="chart">Belum ada data.</div></div>
+ </div>
+ <div class="panel"><h2>Retailer Response</h2><div id="table" class="tablewrap">Belum ada data.</div></div>
+</section>
+
+<section id="input" class="page">
+ <div class="head"><div><h1>Input Kuesioner Retailer</h1><p>Response akan langsung masuk ke Google Sheets.</p></div></div>
+ <form id="form" class="form">
+  <div class="section">
+   <h2>1. Profil Retailer</h2><small>Identitas dan karakteristik kios/toko</small>
+   <div class="row">
+    <div class="field"><label>Nama Kios / Toko *</label><input name="kios" required></div>
+    <div class="field"><label>Lokasi *</label><input name="lokasi" placeholder="Contoh: Nganjuk / Nganjuk" required></div>
+    <div class="field"><label>Lama Beroperasi *</label><select name="operatingAge" required><option value="">Pilih</option><option>&lt; 3 tahun</option><option>3–5 tahun</option><option>&gt; 5 tahun</option></select></div>
+    <div class="field"><label>Kategori Kios *</label><select name="kategori" required><option value="">Pilih</option><option>Kios R2</option><option>Kios R1</option></select></div>
+    <div class="field"><label>Komoditas Utama *</label><select name="komoditas" required><option value="">Pilih</option><option>Padi</option><option>Jagung</option><option>Hortikultura</option><option>Other</option></select></div>
+    <div class="field"><label>Komoditas Lainnya</label><input name="otherCommodity"></div>
+    <div class="field full"><label>Status Rewards Plus *</label><select name="status" required><option value="">Pilih</option><option>Aktif & Rutin Scan Poin</option><option>Terdaftar tetapi Jarang/Tidak Pernah Scan</option><option>Belum Terdaftar</option></select></div>
+   </div>
   </div>
 
-  <div class="filters">
-    <select id="fStatus"><option value="">Semua Status</option></select>
-    <select id="fKategori"><option value="">Semua Kategori</option></select>
-    <select id="fKomoditas"><option value="">Semua Komoditas</option></select>
-    <select id="fLokasi"><option value="">Semua Lokasi</option></select>
+  <div class="section"><h2>2. Economic Value</h2><small>Skala: 1 = STS · 2 = TS · 3 = N · 4 = S · 5 = SS</small>
+   <div id="q1"></div>
+  </div>
+  <div class="section"><h2>3. Tech & Usability</h2><small>Skala: 1 = STS · 2 = TS · 3 = N · 4 = S · 5 = SS</small><div id="q2"></div></div>
+  <div class="section"><h2>4. Demand & Field Force</h2><small>Skala: 1 = STS · 2 = TS · 3 = N · 4 = S · 5 = SS</small><div id="q3"></div></div>
+
+  <div class="section"><h2>5. Loyalty Kompetitor</h2>
+   <div class="row">
+    <div class="field"><label>Ikut Loyalty Kompetitor? *</label><select name="competitor" id="competitor" required><option value="">Pilih</option><option>Ya</option><option>Tidak</option></select></div>
+    <div class="field"><label>Kompetitor</label><select name="competitorName"><option value="">Pilih</option><option>Syngenta</option><option>Corteva</option><option>FMC</option><option>Other</option></select></div>
+    <div class="field"><label>Perbandingan</label><select name="competitorCompare"><option value="">Pilih</option><option>Jauh lebih menguntungkan Bayer</option><option>Sama saja</option><option>Program kompetitor lebih menarik</option></select></div>
+    <div class="field"><label>Alasan Perbandingan</label><textarea name="competitorReason"></textarea></div>
+   </div>
   </div>
 
-  <section class="kpis">
-    <div class="card"><div class="kpi-label">Total Retailer</div><div id="total" class="kpi">0</div></div>
-    <div class="card"><div class="kpi-label">Aktif & Rutin Scan</div><div id="active" class="kpi">0</div></div>
-    <div class="card"><div class="kpi-label">Terdaftar tapi Pasif</div><div id="inactive" class="kpi">0</div></div>
-    <div class="card"><div class="kpi-label">Belum Terdaftar</div><div id="unreg" class="kpi">0</div></div>
-  </section>
-
-  <div class="grid">
-    <section class="panel"><h2>Performa Faktor Q1–Q10</h2><div class="chartbox"><canvas id="factorChart"></canvas></div></section>
-    <section class="panel"><h2>Partisipasi Retailer</h2><div class="chartbox"><canvas id="statusChart"></canvas></div></section>
+  <div class="section"><h2>6. Masukan Retailer</h2>
+   <div class="row">
+    <div class="field full"><label>Kendala Utama</label><textarea name="obstacle" placeholder="Apa kendala terbesar untuk aktif mengumpulkan poin?"></textarea></div>
+    <div class="field full"><label>Ekspektasi Hadiah</label><textarea name="desiredReward"></textarea></div>
+    <div class="field full"><label>Saran</label><textarea name="suggestion"></textarea></div>
+   </div>
   </div>
-
-  <div class="grid">
-    <section class="panel"><h2>Ranking Q1–Q10</h2><div class="chartbox"><canvas id="rankChart"></canvas></div></section>
-    <section class="panel"><h2>Loyalty Kompetitor</h2><div class="chartbox"><canvas id="compChart"></canvas></div></section>
-  </div>
-
-  <section class="panel" style="margin-bottom:18px">
-    <h2>Retailer Response</h2>
-    <div id="tableWrap" class="empty">Belum ada data.</div>
-    <div id="statusMsg" class="status"></div>
-  </section>
-
-  <section class="panel">
-    <h2>Key Insights</h2>
-    <div id="insights" class="insights"><div class="empty">Belum ada data untuk dianalisis.</div></div>
-  </section>
-</main>
-</div>
+  <div class="section actions"><button type="button" class="btn secondary" onclick="document.getElementById('form').reset()">Reset</button><button class="btn primary" type="submit" id="submitBtn">Kirim Response</button></div>
+ </form>
+</section>
+</main></div>
+<div id="toast"></div>
 
 <script>
-const API_URL="https://script.google.com/macros/s/AKfycbymCe-zK_WCmU_nkw2DVB6KS7Cy3SEUPyw8KRUnZ_XHvwTP9chE9TigzAnHeuWzrJts/exec";
-let allData=[], charts={};
-
+const API="https://script.google.com/macros/s/AKfycbymCe-zK_WCmU_nkw2DVB6KS7Cy3SEUPyw8KRUnZ_XHvwTP9chE9TigzAnHeuWzrJts/exec";
+const questions=[
+"Q1. Konversi poin yang diberikan Bayer sebanding dengan nilai pembelian produk Bayer.",
+"Q2. Pilihan hadiah dalam katalog Rewards Plus cukup beragam dan sesuai kebutuhan saya.",
+"Q3. Pengiriman hadiah Rewards Plus dilakukan tepat waktu dan transparan.",
+"Q4. Insentif poin Rewards Plus meningkatkan keuntungan/margin bersih saya.",
+"Q5. Aplikasi Rewards Plus mudah digunakan dan jarang mengalami error.",
+"Q6. Proses scan QR / upload struk berlangsung cepat dan praktis.",
+"Q7. Informasi poin dan riwayat transaksi mudah dipahami.",
+"Q8. Produk Bayer mudah dijual dan memiliki perputaran yang cepat.",
+"Q9. Field force Bayer membantu ketika saya mengalami masalah aplikasi/poin.",
+"Q10. Tim Bayer memberikan edukasi dan mengingatkan promo terbaru."
+];
+function makeQuestions(){
+ [["q1",[0,1,2,3]],["q2",[4,5,6]],["q3",[7,8,9]]].forEach(([id,inds])=>{
+  $(id).innerHTML=inds.map(i=>`<div class="q"><div class="qtext">${questions[i]}</div><div class="scale">${[1,2,3,4,5].map(v=>`<label><input type="radio" name="Q${i+1}" value="${v}" required>${v}</label>`).join("")}</div></div>`).join("");
+ })
+}
 const $=id=>document.getElementById(id);
-const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
-
-function unique(field){return [...new Set(allData.map(x=>x[field]).filter(Boolean))].sort();}
-function fillSelect(id,values){const el=$(id); const first=el.options[0]; el.innerHTML=""; el.appendChild(first); values.forEach(v=>{const o=document.createElement("option");o.value=v;o.textContent=v;el.appendChild(o)})}
-function filtered(){return allData.filter(x=>
-  (!$("fStatus").value||x.status===$("fStatus").value)&&
-  (!$("fKategori").value||x.kategori===$("fKategori").value)&&
-  (!$("fKomoditas").value||x.komoditas===$("fKomoditas").value)&&
-  (!$("fLokasi").value||x.lokasi===$("fLokasi").value)
-)}
-
-function avgQ(data,i){const vals=data.map(x=>Number(x.q?.[i])).filter(Number.isFinite);return vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:0}
-
-function render(data){
-  $("total").textContent=data.length;
-  $("active").textContent=data.filter(x=>x.status==="Aktif & Rutin Scan Poin").length;
-  $("inactive").textContent=data.filter(x=>x.status==="Terdaftar tetapi Jarang/Tidak Pernah Scan").length;
-  $("unreg").textContent=data.filter(x=>x.status==="Belum Terdaftar").length;
-
-  const qAvg=Array.from({length:10},(_,i)=>avgQ(data,i));
-  const labels=Array.from({length:10},(_,i)=>"Q"+(i+1));
-
-  chart("factorChart","bar",labels,qAvg,{max:5});
-  chart("rankChart","bar",labels,[...qAvg].sort((a,b)=>b-a),{max:5,indexAxis:"y"});
-  chart("statusChart","doughnut",
-    ["Aktif & Rutin Scan Poin","Terdaftar tetapi Jarang/Tidak Pernah Scan","Belum Terdaftar"],
-    [
-      data.filter(x=>x.status==="Aktif & Rutin Scan Poin").length,
-      data.filter(x=>x.status==="Terdaftar tetapi Jarang/Tidak Pernah Scan").length,
-      data.filter(x=>x.status==="Belum Terdaftar").length
-    ]);
-  chart("compChart","doughnut",["Ya","Tidak"],[
-    data.filter(x=>x.competitor==="Ya").length,
-    data.filter(x=>x.competitor==="Tidak").length
-  ]);
-
-  $("tableWrap").innerHTML=data.length?`<div style="overflow:auto"><table><thead><tr>
-  <th>Kios / Toko</th><th>Lokasi</th><th>Kategori</th><th>Komoditas</th><th>Status</th><th>Avg Q1–Q10</th>
-  </tr></thead><tbody>${data.map(x=>`<tr><td><b>${esc(x.kios)}</b></td><td>${esc(x.lokasi)}</td><td>${esc(x.kategori)}</td><td>${esc(x.komoditas)}</td><td><span class="badge">${esc(x.status)}</span></td><td>${avgQ([x],0)||0 /* placeholder */}</td></tr>`).join("")}</tbody></table></div>`:"<div class='empty'>Tidak ada retailer sesuai filter.</div>";
-
-  // Correct per-retailer average column
-  document.querySelectorAll("#tableWrap tbody tr").forEach((tr,i)=>{
-    const a=data[i].q.map(Number).filter(Number.isFinite);
-    tr.lastElementChild.textContent=a.length?(a.reduce((s,v)=>s+v,0)/a.length).toFixed(2):"-";
-  });
-
-  const sorted=qAvg.map((v,i)=>({q:"Q"+(i+1),v})).sort((a,b)=>b.v-a.v);
-  const activePct=data.length?Math.round(data.filter(x=>x.status==="Aktif & Rutin Scan Poin").length/data.length*100):0;
-  $("insights").innerHTML=data.length?`
-    <div class="insight"><b>Partisipasi Aktif</b>${activePct}% retailer aktif & rutin scan poin.</div>
-    <div class="insight"><b>Faktor Terkuat</b>${sorted[0].q} memiliki rata-rata skor tertinggi (${sorted[0].v.toFixed(2)}).</div>
-    <div class="insight"><b>Faktor Terlemah</b>${sorted[9].q} memiliki rata-rata skor terendah (${sorted[9].v.toFixed(2)}).</div>
-  `:"<div class='empty'>Belum ada data untuk dianalisis.</div>";
+function showPage(p){
+ document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
+ $(p).classList.add("active");$("dashBtn").classList.toggle("active",p==="dashboard");$("inputBtn").classList.toggle("active",p==="input");
+ if(p==="dashboard")loadDashboard();
 }
-
-function chart(id,type,labels,data,opt={}){
-  if(charts[id])charts[id].destroy();
-  charts[id]=new Chart($(id),{type,data:{labels,datasets:[{data,label:"Score",borderWidth:1}]},
-    options:{responsive:true,maintainAspectRatio:false,indexAxis:opt.indexAxis||"x",
-      scales:type==="doughnut"?{}:{y:{beginAtZero:true,max:opt.max||undefined}},
-      plugins:{legend:{display:type==="doughnut",position:"bottom"}}
-    }});
+function toast(msg,ok=true){const t=$("toast");t.textContent=msg;t.className=ok?"success":"error";t.style.display="block";setTimeout(()=>t.style.display="none",3500)}
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function renderDashboard(d){
+ $("total").textContent=d.length;$("active").textContent=d.filter(x=>x.status==="Aktif & Rutin Scan Poin").length;$("inactive").textContent=d.filter(x=>x.status==="Terdaftar tetapi Jarang/Tidak Pernah Scan").length;$("unreg").textContent=d.filter(x=>x.status==="Belum Terdaftar").length;
+ if(!d.length){$("factors").textContent="Belum ada data.";$("participation").textContent="Belum ada data.";$("table").textContent="Belum ada data.";return}
+ const av=Array.from({length:10},(_,i)=>{let a=d.map(x=>Number(x.q?.[i])).filter(Number.isFinite);return a.length?(a.reduce((s,v)=>s+v,0)/a.length).toFixed(2):"-"});
+ $("factors").innerHTML=av.map((v,i)=>`<div style="width:100%;margin:6px 0"><b style="display:inline-block;width:35px">Q${i+1}</b><span style="display:inline-block;width:${Number(v)/5*55}%;height:15px;background:#0065b3;border-radius:4px"></span> <b>${v}</b></div>`).join("");
+ const a=d.filter(x=>x.status==="Aktif & Rutin Scan Poin").length,i=d.filter(x=>x.status==="Terdaftar tetapi Jarang/Tidak Pernah Scan").length,u=d.filter(x=>x.status==="Belum Terdaftar").length;
+ $("participation").innerHTML=`<b>Aktif:</b> ${a} &nbsp; | &nbsp; <b>Terdaftar pasif:</b> ${i} &nbsp; | &nbsp; <b>Belum terdaftar:</b> ${u}`;
+ $("table").innerHTML=`<table><thead><tr><th>Kios</th><th>Lokasi</th><th>Kategori</th><th>Komoditas</th><th>Status</th></tr></thead><tbody>${d.map(x=>`<tr><td>${esc(x.kios)}</td><td>${esc(x.lokasi)}</td><td>${esc(x.kategori)}</td><td>${esc(x.komoditas)}</td><td>${esc(x.status)}</td></tr>`).join("")}</tbody></table>`;
 }
-
-function applyFilters(){render(filtered())}
-["fStatus","fKategori","fKomoditas","fLokasi"].forEach(id=>$(id).addEventListener("change",applyFilters));
-
-async function load(){
-  try{
-    const r=await fetch(API_URL+"?action=dashboard",{cache:"no-store"});
-    if(!r.ok)throw new Error("HTTP "+r.status);
-    const j=await r.json();
-    if(!j.ok)throw new Error(j.error||"API error");
-    allData=Array.isArray(j.responses)?j.responses:[];
-    fillSelect("fStatus",unique("status"));fillSelect("fKategori",unique("kategori"));
-    fillSelect("fKomoditas",unique("komoditas"));fillSelect("fLokasi",unique("lokasi"));
-    $("live").className="live ok";$("liveText").textContent="LIVE • GOOGLE SHEETS";
-    $("statusMsg").textContent=`Updated: ${j.updatedAt||"-"} · ${j.total??allData.length} response`;
-    render(allData);
-  }catch(e){
-    allData=[];
-    $("live").className="live err";$("liveText").textContent="CONNECTION ERROR";
-    $("statusMsg").textContent="Tidak dapat mengambil data Google Sheets. Tidak ada demo/fallback data yang digunakan.";
-    render([]);
-    console.error(e);
-  }
+async function loadDashboard(){
+ try{let r=await fetch(API+"?action=dashboard",{cache:"no-store"});if(!r.ok)throw Error("HTTP "+r.status);let j=await r.json();if(!j.ok)throw Error(j.error||"API error");$("connection").textContent="LIVE • GOOGLE SHEETS";renderDashboard(j.responses||[])}
+ catch(e){$("connection").textContent="CONNECTION ERROR";renderDashboard([])}
 }
-load();
+$("form").addEventListener("submit",async e=>{
+ e.preventDefault();const f=e.target;const btn=$("submitBtn");btn.disabled=true;btn.textContent="Mengirim...";
+ const fd=new FormData(f), payload={action:"submit"};
+ fd.forEach((v,k)=>payload[k]=v);
+ payload.q=[1,2,3,4,5,6,7,8,9,10].map(n=>Number(payload["Q"+n]));
+ try{
+  const body=new URLSearchParams();
+  Object.entries(payload).forEach(([k,v])=>body.append(k,Array.isArray(v)?JSON.stringify(v):v));
+  const r=await fetch(API,{method:"POST",body});
+  const j=await r.json();
+  if(!j.ok)throw Error(j.error||"Gagal menyimpan");
+  toast("Response berhasil disimpan ke Google Sheets.",true);f.reset();showPage("dashboard");
+ }catch(err){toast("Gagal mengirim response. Cek koneksi / Apps Script.",false);console.error(err)}
+ finally{btn.disabled=false;btn.textContent="Kirim Response"}
+});
+makeQuestions();loadDashboard();
 </script>
 </body>
 </html>
