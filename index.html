@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bayer Rewards Plus — Live Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root{
+  --bayer:#0066b3;--bayer2:#0085c8;--ink:#17324d;--muted:#718096;
+  --bg:#f4f7fb;--card:#fff;--line:#e5edf5;--green:#20a464;--orange:#f59e0b;--red:#e55353;
+}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+.app{display:flex;min-height:100vh}.side{width:245px;background:#fff;border-right:1px solid var(--line);padding:24px 16px;position:fixed;height:100vh}
+.brand{font-weight:800;font-size:21px;color:var(--bayer);padding:8px 12px 28px}.brand small{display:block;font-size:11px;color:#8a9aae;margin-top:4px;font-weight:600}
+.nav{padding:8px 0}.nav a{display:block;padding:12px 14px;border-radius:10px;text-decoration:none;color:#60748a;font-weight:650;margin:4px 0}.nav a.active,.nav a:hover{background:#eaf5fc;color:var(--bayer)}
+.main{margin-left:245px;width:calc(100% - 245px);padding:28px 32px}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}.title h1{margin:0;font-size:26px}.title p{margin:6px 0 0;color:var(--muted);font-size:13px}
+.live{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);padding:9px 12px;border-radius:10px;font-size:12px;font-weight:700}.dot{width:8px;height:8px;border-radius:50%;background:var(--green)}
+.filters{display:flex;gap:10px;flex-wrap:wrap;background:#fff;padding:14px;border:1px solid var(--line);border-radius:14px;margin-bottom:18px}
+select,.btn{border:1px solid #dbe5ef;background:#fff;border-radius:9px;padding:9px 11px;color:var(--ink);font-size:12px}.btn{cursor:pointer;font-weight:700}.btn.primary{background:var(--bayer);color:#fff;border-color:var(--bayer)}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}.kpi{background:#fff;border:1px solid var(--line);border-radius:15px;padding:17px}.kpi .label{font-size:12px;color:var(--muted);font-weight:700}.kpi .value{font-size:29px;font-weight:800;margin-top:8px}.kpi .sub{font-size:11px;color:#8b9aab;margin-top:4px}
+.grid2{display:grid;grid-template-columns:1.35fr 1fr;gap:18px;margin-bottom:18px}.card{background:#fff;border:1px solid var(--line);border-radius:15px;padding:18px}.card h3{margin:0;font-size:15px}.card .hint{font-size:11px;color:var(--muted);margin-top:4px;margin-bottom:15px}
+.chartbox{height:265px;position:relative}.factor-row{margin:13px 0}.factor-head{display:flex;justify-content:space-between;font-size:12px;font-weight:700}.bar{height:9px;background:#edf2f7;border-radius:20px;margin-top:6px;overflow:hidden}.fill{height:100%;background:var(--bayer);border-radius:20px}
+.table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse;font-size:12px}.table th,.table td{padding:11px 9px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}.table th{color:#74869a;font-size:11px;text-transform:uppercase}.badge{display:inline-block;padding:5px 8px;border-radius:20px;font-size:10px;font-weight:800}.active-b{background:#e7f7ef;color:#16834f}.inactive-b{background:#fff4dd;color:#a66a00}.none-b{background:#feecec;color:#b63b3b}
+.insights{display:grid;grid-template-columns:1fr 1fr;gap:14px}.insight{padding:14px;border-radius:12px;border:1px solid var(--line)}.insight strong{display:block;font-size:12px;margin-bottom:6px}.insight span{font-size:13px;color:#5e7084}
+.footer{color:#91a0b0;font-size:10px;margin-top:18px;text-align:right}
+@media(max-width:1000px){.side{width:190px}.main{margin-left:190px;width:calc(100% - 190px)}.kpis{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}}
+@media(max-width:650px){.side{display:none}.main{margin:0;width:100%;padding:18px}.kpis{grid-template-columns:1fr 1fr}.top{align-items:flex-start}.title h1{font-size:21px}.insights{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="side">
+  <div class="brand">BAYER <span style="font-weight:500">Rewards Plus</span><small>LIVE MARKET RESEARCH</small></div>
+  <nav class="nav">
+    <a class="active" href="#overview">Overview</a>
+    <a href="#factors">Factor Analysis</a>
+    <a href="#questions">Q1–Q10</a>
+    <a href="#retailers">Retailer Data</a>
+  </nav>
+  <div style="position:absolute;bottom:24px;left:28px;right:20px;font-size:11px;color:#93a2b1;line-height:1.5">
+    Territory Kediri<br><b style="color:#65788b">Kabupaten Nganjuk</b>
+  </div>
+</aside>
+
+<main class="main">
+  <div class="top">
+    <div class="title"><h1>Dashboard Live</h1><p>Analisis Partisipasi Retailer — Bayer Rewards Plus</p></div>
+    <div class="live"><span class="dot"></span><span id="liveText">DEMO DATA</span></div>
+  </div>
+
+  <div class="filters">
+    <select id="status"><option value="">Semua Status</option><option>Active & Rutin Scan Poin</option><option>Registered but Rarely/Never Scan</option><option>Not Registered</option></select>
+    <select id="category"><option value="">Semua Kategori</option><option>R2</option><option>R1</option></select>
+    <select id="commodity"><option value="">Semua Komoditas</option><option>Padi</option><option>Jagung</option><option>Horticulture</option><option>Other</option></select>
+    <button class="btn" onclick="resetFilters()">Reset</button>
+    <button class="btn primary" onclick="loadData()">↻ Refresh</button>
+  </div>
+
+  <section id="overview" class="kpis">
+    <div class="kpi"><div class="label">TOTAL RESPONDENTS</div><div class="value" id="total">0</div><div class="sub">Data masuk</div></div>
+    <div class="kpi"><div class="label">ACTIVE & RUTIN SCAN</div><div class="value" id="active">0</div><div class="sub" id="activePct">0%</div></div>
+    <div class="kpi"><div class="label">REGISTERED — INACTIVE</div><div class="value" id="inactive">0</div><div class="sub" id="inactivePct">0%</div></div>
+    <div class="kpi"><div class="label">NOT REGISTERED</div><div class="value" id="none">0</div><div class="sub" id="nonePct">0%</div></div>
+  </section>
+
+  <div class="grid2" id="factors">
+    <div class="card"><h3>Factor Performance</h3><div class="hint">Rata-rata skor 1–5</div><div id="factorList"></div></div>
+    <div class="card"><h3>Participation Status</h3><div class="hint">Komposisi retailer</div><div class="chartbox"><canvas id="statusChart"></canvas></div></div>
+  </div>
+
+  <div class="grid2" id="questions">
+    <div class="card"><h3>Q1–Q10 Ranking</h3><div class="hint">Pertanyaan dengan skor terendah → tertinggi</div><div id="questionList"></div></div>
+    <div class="card"><h3>Competitor Program</h3><div class="hint">Retailer yang mengikuti program manufacturer lain</div><div class="chartbox"><canvas id="competitorChart"></canvas></div></div>
+  </div>
+
+  <div class="card" id="retailers">
+    <h3>Retailer Data</h3><div class="hint">Ringkasan data responden yang tersedia di dashboard</div>
+    <div class="table-wrap"><table class="table"><thead><tr><th>Kios</th><th>Lokasi</th><th>Kategori</th><th>Komoditas</th><th>Status</th><th>Overall</th></tr></thead><tbody id="rows"></tbody></table></div>
+  </div>
+
+  <div class="card" style="margin-top:18px">
+    <h3>Key Insights</h3><div class="hint">Otomatis dari skor faktor</div>
+    <div class="insights"><div class="insight"><strong>TOP STRENGTH</strong><span id="strength">—</span></div><div class="insight"><strong>TOP ISSUE</strong><span id="issue">—</span></div></div>
+  </div>
+  <div class="footer">Bayer Rewards Plus • Live Dashboard Prototype</div>
+</main>
+</div>
+
+<script>
+const APPS_SCRIPT_URL = "PASTE_APPS_SCRIPT_WEB_APP_URL_HERE";
+
+let allData = [
+ {kios:"TEST KIOS 01",lokasi:"Nganjuk",kategori:"R2",komoditas:"Padi",status:"Active & Rutin Scan Poin",q:[5,4,5,4,5,5,4,4,5,4],competitor:"Yes"},
+ {kios:"TEST KIOS 02",lokasi:"Prambon",kategori:"R2",komoditas:"Horticulture",status:"Registered but Rarely/Never Scan",q:[3,3,4,3,3,3,3,4,3,3],competitor:"Yes"},
+ {kios:"TEST KIOS 03",lokasi:"Kertosono",kategori:"R1",komoditas:"Jagung",status:"Not Registered",q:[2,2,3,2,3,2,2,3,2,3],competitor:"No"},
+ {kios:"TEST KIOS 04",lokasi:"Loceret",kategori:"R2",komoditas:"Padi",status:"Active & Rutin Scan Poin",q:[4,5,4,5,4,4,5,5,4,5],competitor:"No"}
+];
+let statusChart, competitorChart;
+
+const labels=["Q1","Q2","Q3","Q4","Q5","Q6","Q7","Q8","Q9","Q10"];
+const factorNames=["Economic Value","Tech & Usability","Demand & Field Force"];
+const factorRanges=[[0,4],[4,7],[7,10]];
+
+function filtered(){
+ const s=document.getElementById("status").value,c=document.getElementById("category").value,m=document.getElementById("commodity").value;
+ return allData.filter(x=>(!s||x.status===s)&&(!c||x.kategori===c)&&(!m||x.komoditas===m));
+}
+function avg(arr){return arr.length?arr.reduce((a,b)=>a+b,0)/arr.length:0}
+function render(){
+ const d=filtered(), n=d.length;
+ const counts=[
+  d.filter(x=>x.status==="Active & Rutin Scan Poin").length,
+  d.filter(x=>x.status==="Registered but Rarely/Never Scan").length,
+  d.filter(x=>x.status==="Not Registered").length
+ ];
+ document.getElementById("total").textContent=n;
+ ["active","inactive","none"].forEach((id,i)=>document.getElementById(id).textContent=counts[i]);
+ ["activePct","inactivePct","nonePct"].forEach((id,i)=>document.getElementById(id).textContent=n?((counts[i]/n)*100).toFixed(1)+"% of respondents":"0%");
+ const qs=labels.map((_,i)=>avg(d.map(x=>x.q[i])));
+ const factors=factorRanges.map(([a,b])=>avg(d.flatMap(x=>x.q.slice(a,b))));
+ document.getElementById("factorList").innerHTML=factors.map((v,i)=>`<div class="factor-row"><div class="factor-head"><span>${factorNames[i]}</span><span>${v.toFixed(2)} / 5</span></div><div class="bar"><div class="fill" style="width:${v/5*100}%"></div></div></div>`).join("");
+ const ranked=qs.map((v,i)=>({v,i})).sort((a,b)=>a.v-b.v);
+ document.getElementById("questionList").innerHTML=ranked.map(x=>`<div class="factor-row"><div class="factor-head"><span>${labels[x.i]}</span><span>${x.v.toFixed(2)}</span></div><div class="bar"><div class="fill" style="width:${x.v/5*100}%"></div></div></div>`).join("");
+ const overall=d.map(x=>avg(x.q));
+ document.getElementById("strength").textContent=n?`${factorNames[factors.indexOf(Math.max(...factors))]} adalah faktor terkuat dengan skor ${Math.max(...factors).toFixed(2)}.`:"Belum ada data.";
+ document.getElementById("issue").textContent=n?`${factorNames[factors.indexOf(Math.min(...factors))]} menjadi prioritas perbaikan dengan skor ${Math.min(...factors).toFixed(2)}.`:"Belum ada data.";
+ document.getElementById("rows").innerHTML=d.map((x,i)=>`<tr><td><b>${esc(x.kios)}</b></td><td>${esc(x.lokasi)}</td><td>${esc(x.kategori)}</td><td>${esc(x.komoditas)}</td><td>${badge(x.status)}</td><td>${overall[i].toFixed(2)}</td></tr>`).join("");
+ drawCharts(counts,d.filter(x=>x.competitor==="Yes").length,d.filter(x=>x.competitor==="No").length);
+}
+function badge(s){let c=s.startsWith("Active")?"active-b":s.startsWith("Registered")?"inactive-b":"none-b";return `<span class="badge ${c}">${esc(s)}</span>`}
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+function drawCharts(counts,yes,no){
+ if(statusChart)statusChart.destroy(); if(competitorChart)competitorChart.destroy();
+ statusChart=new Chart(document.getElementById("statusChart"),{type:"doughnut",data:{labels:["Active","Inactive","Not Registered"],datasets:[{data:counts}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom",labels:{boxWidth:10,font:{size:10}}}}}});
+ competitorChart=new Chart(document.getElementById("competitorChart"),{type:"doughnut",data:{labels:["Yes","No"],datasets:[{data:[yes,no]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom",labels:{boxWidth:10,font:{size:10}}}}}});
+}
+function resetFilters(){document.querySelectorAll(".filters select").forEach(x=>x.value="");render()}
+async function loadData(){
+ if(APPS_SCRIPT_URL.includes("PASTE_")){render();return}
+ try{
+   const r=await fetch(APPS_SCRIPT_URL+"?action=dashboard");
+   const j=await r.json();
+   if(j.responses){allData=j.responses;document.getElementById("liveText").textContent="LIVE • GOOGLE SHEETS";render()}
+ }catch(e){document.getElementById("liveText").textContent="DEMO DATA • CONNECTION ERROR";render()}
+}
+document.querySelectorAll(".filters select").forEach(x=>x.addEventListener("change",render));
+render(); loadData();
+</script>
+</body></html>
