@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Bayer Rewards Plus</title>
+<title>Bayer Rewards Plus</title><script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
 :root{--blue:#003b7a;--blue2:#0065b3;--green:#78be20;--bg:#f4f7fb;--text:#17212b;--muted:#697586;--line:#dfe5ec}
 *{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
@@ -12,13 +12,13 @@
 .nav button{border:0;background:transparent;padding:10px 15px;border-radius:9px;font-weight:700;cursor:pointer;color:#4c5968}.nav button.active{background:var(--blue);color:#fff}
 .container{max-width:1250px;margin:auto;padding:25px}.page{display:none}.page.active{display:block}
 .head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px}.head h1{margin:0;font-size:27px}.head p{margin:6px 0;color:var(--muted)}
-.head-actions{display:flex;align-items:center;gap:10px}.refresh{background:#fff;color:var(--blue);border:1px solid var(--blue)}.refresh:hover{background:#eef5fb}.refresh:disabled{opacity:.65;cursor:wait}.live{font-size:12px;font-weight:800;background:#fff;border:1px solid var(--line);border-radius:18px;padding:9px 12px}.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#78be20;margin-right:7px}
+.live{font-size:12px;font-weight:800;background:#fff;border:1px solid var(--line);border-radius:18px;padding:9px 12px}.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#78be20;margin-right:7px}
 .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}.card,.panel{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 2px 10px #183b5d08}.card{padding:17px}.label{font-size:11px;color:var(--muted);font-weight:800;text-transform:uppercase}.num{font-size:29px;color:var(--blue);font-weight:900;margin-top:7px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:17px}.panel{padding:18px;margin-bottom:17px}.panel h2{font-size:16px;margin:0 0 15px}.chart canvas{max-width:280px;max-height:240px}.chart{height:270px;display:flex;align-items:center;justify-content:center;color:var(--muted)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:17px}.panel{padding:18px;margin-bottom:17px}.panel h2{font-size:16px;margin:0 0 15px}.chart{height:270px;display:flex;align-items:center;justify-content:center;color:var(--muted)}
 .form{max-width:900px;margin:auto}.section{background:#fff;border:1px solid var(--line);border-radius:14px;margin-bottom:15px;padding:20px}.section h2{margin:0 0 4px;color:var(--blue);font-size:18px}.section small{color:var(--muted)}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:15px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}label{font-size:13px;font-weight:700}input,select,textarea{font:inherit;border:1px solid #cfd7e1;border-radius:9px;padding:10px 11px;background:#fff}textarea{min-height:85px;resize:vertical}
 .q{padding:14px 0;border-bottom:1px solid #edf0f3}.q:last-child{border-bottom:0}.qtext{font-size:14px;font-weight:700;margin-bottom:10px}.scale{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}.scale label{border:1px solid #d5dce5;border-radius:9px;padding:9px 5px;text-align:center;cursor:pointer;font-weight:700;color:#596575}.scale input{display:none}.scale label:has(input:checked){background:var(--blue);border-color:var(--blue);color:#fff}
-.actions{display:flex;justify-content:flex-end;gap:10px}.btn{border:0;border-radius:9px;padding:11px 18px;font-weight:800;cursor:pointer}.primary{background:var(--blue);color:#fff}.secondary{background:#e9eef4;color:#314154}
+.actions{display:flex;justify-content:flex-end;gap:10px}.btn{border:0;border-radius:9px;padding:11px 18px;font-weight:800;cursor:pointer}.primary{background:var(--blue);color:#fff}.btn:disabled{opacity:.65;cursor:wait}.secondary{background:#e9eef4;color:#314154}
 #toast{position:fixed;right:22px;bottom:22px;background:#17212b;color:#fff;padding:13px 17px;border-radius:10px;display:none;z-index:30;max-width:360px}.success{background:#267a2d!important}.error{background:#b52d2d!important}
 .tablewrap{overflow:auto}table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:10px;border-bottom:1px solid #edf0f3}th{font-size:11px;color:var(--muted);text-transform:uppercase}
 @media(max-width:800px){.kpis,.grid,.row{grid-template-columns:1fr}.topbar{padding:0 13px}.container{padding:15px}.nav button{padding:8px}.head{flex-direction:column;gap:10px}}
@@ -36,7 +36,7 @@
 
 <main class="container">
 <section id="dashboard" class="page active">
- <div class="head"><div><h1>Rewards Plus — Live Dashboard</h1><p>Analisis partisipasi retailer Kabupaten Nganjuk · Territory Kediri</p></div><div class="head-actions"><button class="btn refresh" id="refreshBtn" onclick="refreshDashboard()">↻ Refresh</button><div class="live"><span class="dot"></span><span id="connection">CONNECTING...</span></div></div></div>
+ <div class="head"><div><h1>Rewards Plus — Live Dashboard</h1><p>Analisis partisipasi retailer Kabupaten Nganjuk · Territory Kediri</p></div><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><div class="live"><span class="dot"></span><span id="connection">CONNECTING...</span></div><button id="refreshBtn" class="btn primary" type="button" onclick="refreshDashboard()">↻ Refresh</button></div></div>
  <div class="kpis">
   <div class="card"><div class="label">Total Retailer</div><div id="total" class="num">0</div></div>
   <div class="card"><div class="label">Aktif & Rutin Scan</div><div id="active" class="num">0</div></div>
@@ -44,8 +44,8 @@
   <div class="card"><div class="label">Belum Terdaftar</div><div id="unreg" class="num">0</div></div>
  </div>
  <div class="grid">
-  <div class="panel"><h2>Ringkasan Faktor Q1–Q10</h2><div id="factors" class="chart">Belum ada data.</div></div>
-  <div class="panel"><h2>Partisipasi Retailer</h2><div id="participation" class="chart"><canvas id="participationChart" width="280" height="240" aria-label="Diagram lingkaran partisipasi retailer"></canvas></div></div>
+  <div class="panel"><h2>Ringkasan Faktor Q1–Q10</h2><div id="factors" class="chart" style="height:auto;display:block;text-align:left">Belum ada data.</div></div>
+  <div class="panel"><h2>Partisipasi Retailer</h2><div class="chart" style="height:300px"><canvas id="participationChart"></canvas></div><div id="participationLegend" style="font-size:13px;color:var(--muted);text-align:center"></div></div>
  </div>
  <div class="panel"><h2>Retailer Response</h2><div id="table" class="tablewrap">Belum ada data.</div></div>
 </section>
@@ -121,42 +121,37 @@ function showPage(p){
 }
 function toast(msg,ok=true){const t=$("toast");t.textContent=msg;t.className=ok?"success":"error";t.style.display="block";setTimeout(()=>t.style.display="none",3500)}
 function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+let participationChart=null;
+function interpretation(s){if(s>=4.5)return "Sangat positif";if(s>=4)return "Positif";if(s>=3)return "Cukup positif";if(s>=2)return "Perlu perhatian";return "Rendah";}
+function makeAIInsight(d){
+ if(!d.length){$("factors").textContent="Belum ada data.";return;}
+ const scores=Array.from({length:10},(_,i)=>{const a=d.map(x=>Number(x.q?.[i])).filter(Number.isFinite);return a.length?a.reduce((s,v)=>s+v,0)/a.length:0;});
+ const groups=[["Economic Value",0,4],["Tech & Usability",4,7],["Demand & Field Force",7,10]];
+ const gs=groups.map(g=>{const a=scores.slice(g[1],g[2]).filter(x=>x>0);return {name:g[0],score:a.reduce((s,v)=>s+v,0)/a.length};});
+ const ranked=scores.map((score,i)=>({q:i+1,score})).filter(x=>x.score>0);
+ const high=[...ranked].sort((a,b)=>b.score-a.score).slice(0,3),low=[...ranked].sort((a,b)=>a.score-b.score).slice(0,3);
+ const overall=ranked.reduce((s,x)=>s+x.score,0)/ranked.length;
+ $("factors").innerHTML=`<div style="background:#f7f9fc;border:1px solid var(--line);border-radius:12px;padding:15px;margin-bottom:12px"><div style="font-weight:900;color:var(--blue);font-size:15px;margin-bottom:8px">AI Insight Kuesioner</div><div style="font-size:14px;line-height:1.6">Berdasarkan <b>${d.length} response</b>, skor keseluruhan Q1–Q10 adalah <b>${overall.toFixed(2)}/5</b> (${interpretation(overall)}). Skor relatif tinggi: <b>${high.map(x=>`Q${x.q} (${x.score.toFixed(2)})`).join(", ")}</b>. Area yang perlu diperhatikan: <b>${low.map(x=>`Q${x.q} (${x.score.toFixed(2)})`).join(", ")}</b>.</div></div><div style="font-size:14px;line-height:1.55">${gs.map(g=>`<div style="margin:7px 0"><b>${g.name}</b>: ${g.score.toFixed(2)}/5 (${interpretation(g.score)})</div>`).join("")}</div><div style="margin-top:12px;font-size:12px;color:var(--muted)">Ringkasan otomatis berdasarkan skor aktual Q1–Q10.</div>`;
+}
+function renderParticipationPie(d){
+ const a=d.filter(x=>x.status==="Aktif & Rutin Scan Poin").length,i=d.filter(x=>x.status==="Terdaftar tetapi Jarang/Tidak Pernah Scan").length,u=d.filter(x=>x.status==="Belum Terdaftar").length;
+ const ctx=$("participationChart").getContext("2d");if(participationChart)participationChart.destroy();
+ participationChart=new Chart(ctx,{type:"pie",data:{labels:["Aktif & Rutin Scan","Terdaftar tetapi Pasif","Belum Terdaftar"],datasets:[{data:[a,i,u]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom"},tooltip:{callbacks:{label:c=>{const pct=d.length?((c.raw/d.length)*100).toFixed(1):0;return ` ${c.label}: ${c.raw} (${pct}%)`;}}}}}});
+ $("participationLegend").textContent=`Total ${d.length} retailer · Aktif ${a} · Pasif ${i} · Belum terdaftar ${u}`;
+}
 function renderDashboard(d){
  $("total").textContent=d.length;$("active").textContent=d.filter(x=>x.status==="Aktif & Rutin Scan Poin").length;$("inactive").textContent=d.filter(x=>x.status==="Terdaftar tetapi Jarang/Tidak Pernah Scan").length;$("unreg").textContent=d.filter(x=>x.status==="Belum Terdaftar").length;
- if(!d.length){$("factors").textContent="Belum ada data.";$("participation").textContent="Belum ada data.";$("table").textContent="Belum ada data.";return}
- const av=Array.from({length:10},(_,i)=>{let a=d.map(x=>Number(x.q?.[i])).filter(Number.isFinite);return a.length?(a.reduce((s,v)=>s+v,0)/a.length).toFixed(2):"-"});
- $("factors").innerHTML=av.map((v,i)=>`<div style="width:100%;margin:6px 0"><b style="display:inline-block;width:35px">Q${i+1}</b><span style="display:inline-block;width:${Number(v)/5*55}%;height:15px;background:#0065b3;border-radius:4px"></span> <b>${v}</b></div>`).join("");
- const a=d.filter(x=>x.status==="Aktif & Rutin Scan Poin").length,i=d.filter(x=>x.status==="Terdaftar tetapi Jarang/Tidak Pernah Scan").length,u=d.filter(x=>x.status==="Belum Terdaftar").length;
- $("participation").innerHTML=`<b>Aktif:</b> ${a} &nbsp; | &nbsp; <b>Terdaftar pasif:</b> ${i} &nbsp; | &nbsp; <b>Belum terdaftar:</b> ${u}`;
+ if(!d.length){$("factors").textContent="Belum ada data.";$("participationLegend").textContent="Belum ada data.";$("table").textContent="Belum ada data.";if(participationChart){participationChart.destroy();participationChart=null;}return;}
+ makeAIInsight(d);renderParticipationPie(d);
  $("table").innerHTML=`<table><thead><tr><th>Kios</th><th>Lokasi</th><th>Kategori</th><th>Komoditas</th><th>Status</th></tr></thead><tbody>${d.map(x=>`<tr><td>${esc(x.kios)}</td><td>${esc(x.lokasi)}</td><td>${esc(x.kategori)}</td><td>${esc(x.komoditas)}</td><td>${esc(x.status)}</td></tr>`).join("")}</tbody></table>`;
 }
-function drawPieChart(values){
-  const canvas=$("participationChart");
-  if(!canvas)return;
-  const ctx=canvas.getContext("2d");
-  const total=values.reduce((a,b)=>a+b,0);
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  if(!total){ctx.font="14px Arial";ctx.fillStyle="#697586";ctx.textAlign="center";ctx.fillText("Belum ada data",canvas.width/2,canvas.height/2);return}
-  const labels=["Aktif & Rutin Scan","Terdaftar tapi Pasif","Belum Terdaftar"];
-  const colors=["#003b7a","#78be20","#9aa7b5"];
-  let start=-Math.PI/2, cx=125, cy=120, radius=82;
-  values.forEach((v,idx)=>{
-    if(!v)return;
-    const angle=(v/total)*Math.PI*2;
-    ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,radius,start,start+angle);ctx.closePath();
-    ctx.fillStyle=colors[idx];ctx.fill();ctx.strokeStyle="#fff";ctx.lineWidth=2;ctx.stroke();
-    start+=angle;
-  });
-  ctx.font="bold 13px Arial";ctx.textAlign="left";
-  labels.forEach((label,idx)=>{
-    const y=25+idx*28;ctx.fillStyle=colors[idx];ctx.fillRect(220,y-10,11,11);ctx.fillStyle="#17212b";ctx.fillText(`${label}: ${values[idx]} (${Math.round(values[idx]/total*100)}%)`,238,y);
-  });
+async function loadDashboard(showToast=false){
+ const b=$("refreshBtn");if(b){b.disabled=true;b.textContent="↻ Loading...";}
+ try{const r=await fetch(API+"?action=dashboard&_="+Date.now(),{cache:"no-store"});if(!r.ok)throw Error("HTTP "+r.status);const j=await r.json();if(!j.ok)throw Error(j.error||"API error");$("connection").textContent="LIVE • GOOGLE SHEETS";renderDashboard(j.responses||[]);if(showToast)toast("Dashboard berhasil diperbarui.",true);}
+ catch(e){$("connection").textContent="CONNECTION ERROR";if(showToast)toast("Gagal refresh dashboard.",false);console.error(e);}
+ finally{if(b){b.disabled=false;b.textContent="↻ Refresh";}}
 }
-function refreshDashboard(){loadDashboard(true)}
-async function loadDashboard(){
- try{let r=await fetch(API+"?action=dashboard",{cache:"no-store"});if(!r.ok)throw Error("HTTP "+r.status);let j=await r.json();if(!j.ok)throw Error(j.error||"API error");$("connection").textContent="LIVE • GOOGLE SHEETS";renderDashboard(j.responses||[])}
- catch(e){$("connection").textContent="CONNECTION ERROR";renderDashboard([])}
-}
+function refreshDashboard(){loadDashboard(true);}
 $("form").addEventListener("submit",async e=>{
  e.preventDefault();const f=e.target;const btn=$("submitBtn");btn.disabled=true;btn.textContent="Mengirim...";
  const fd=new FormData(f), payload={action:"submit"};
