@@ -63,6 +63,10 @@ table{min-width:640px}
 @media(min-width:700px){
  .container{padding:22px}.kpis{grid-template-columns:repeat(4,1fr)}.grid{grid-template-columns:1.15fr .85fr}.row{grid-template-columns:1fr 1fr}
 }
+
+.modal{display:none;position:fixed;inset:0;z-index:100}.modal.open{display:block}.modal-backdrop{position:absolute;inset:0;background:rgba(15,31,48,.55);backdrop-filter:blur(3px)}.modal-card{position:relative;width:min(920px,calc(100% - 24px));max-height:calc(100vh - 30px);overflow:auto;margin:15px auto;background:#fff;border-radius:18px;box-shadow:0 20px 60px rgba(0,0,0,.2);padding:18px}.modal-head{display:flex;justify-content:space-between;gap:15px;align-items:flex-start;border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:14px}.modal-title{font-size:20px;font-weight:900;color:var(--blue)}.modal-subtitle{font-size:12px;color:var(--muted);margin-top:4px}.modal-close{border:0;background:#edf1f5;border-radius:10px;width:42px;height:42px;font-size:25px;cursor:pointer}.detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.detail-item{background:#f7f9fc;border:1px solid #e5eaf0;border-radius:11px;padding:11px}.detail-item.full{grid-column:1/-1}.detail-label{font-size:10px;text-transform:uppercase;color:var(--muted);font-weight:800;margin-bottom:4px}.detail-value{font-size:14px;line-height:1.45;white-space:pre-wrap}.q-detail{margin-top:15px;border:1px solid #e5eaf0;border-radius:12px;overflow:hidden}.q-detail-row{display:grid;grid-template-columns:70px 1fr 80px;gap:8px;padding:10px;border-bottom:1px solid #edf0f3;align-items:center}.q-detail-row:last-child{border-bottom:0}.score-pill{font-weight:900;text-align:center;border-radius:9px;padding:6px;background:#edf4fb;color:var(--blue)}.score-low{background:#fff0ee;color:#b52d2d}.score-mid{background:#fff8df;color:#8a6500}.action-cell{white-space:nowrap}.mini-btn{border:0;border-radius:8px;padding:7px 9px;font-weight:800;cursor:pointer;margin-right:4px}.mini-btn.detail{background:#e9eef4;color:#26384a}.mini-btn.edit{background:var(--blue);color:#fff}.concern{display:inline-block;font-size:10px;font-weight:900;padding:4px 7px;border-radius:999px;margin-left:6px}.concern.high{background:#ffe8e5;color:#b52d2d}.concern.watch{background:#fff4d6;color:#8a6500}.concern.ok{background:#e8f5df;color:#3c7417}.factor-row{padding:10px 0;border-bottom:1px solid #edf0f3}.factor-row:last-child{border-bottom:0}.factor-top{display:flex;justify-content:space-between;gap:8px;font-size:13px;font-weight:800}.bar{height:8px;background:#edf1f5;border-radius:999px;overflow:hidden;margin:7px 0}.bar>span{display:block;height:100%;background:linear-gradient(90deg,#78be20,#0065b3);border-radius:999px}.factor-meta{font-size:11px;color:var(--muted);line-height:1.4}.insight-box{background:#f7f9fc;border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}.insight-title{font-weight:900;color:var(--blue);margin-bottom:6px}.obstacle-card{border:1px solid #e5eaf0;border-radius:12px;padding:12px;margin-bottom:9px}.obstacle-top{display:flex;justify-content:space-between;gap:8px;font-weight:800}.obstacle-bar{height:7px;background:#edf1f5;border-radius:999px;margin:7px 0}.obstacle-bar span{display:block;height:100%;background:#0065b3;border-radius:999px} .muted{color:var(--muted)}
+.multi-check{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:2px}.check-chip{display:flex;align-items:center;gap:8px;border:1px solid #d5dce5;border-radius:10px;padding:10px 11px;background:#fff;cursor:pointer;font-weight:700;min-height:44px}.check-chip input{width:18px;height:18px;accent-color:var(--blue);margin:0}.check-chip:has(input:checked){background:#edf4fb;border-color:var(--blue);color:var(--blue)}.field-hint{font-size:11px;color:var(--muted);margin-top:3px}@media(max-width:700px){.multi-check{grid-template-columns:1fr}}
+@media(max-width:700px){.detail-grid{grid-template-columns:1fr}.q-detail-row{grid-template-columns:48px 1fr 74px}.modal-card{width:calc(100% - 14px);max-height:calc(100vh - 14px);margin:7px auto;padding:14px}.modal-title{font-size:18px}.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.kpis .card:first-child{grid-column:1/-1}.action-cell{display:flex;flex-direction:column;gap:5px}.mini-btn{margin:0;width:100%}}
 </style>
 </head>
 <body>
@@ -81,14 +85,16 @@ table{min-width:640px}
  <div class="kpis">
   <div class="card"><div class="label">Total Retailer</div><div id="total" class="num">0</div></div>
   <div class="card"><div class="label">Aktif & Rutin Scan</div><div id="active" class="num">0</div></div>
-  <div class="card"><div class="label">Terdaftar tapi Pasif</div><div id="inactive" class="num">0</div></div>
+  <div class="card"><div class="label">Terdaftar · Jarang Scan</div><div id="rare" class="num">0</div></div>
+  <div class="card"><div class="label">Terdaftar · Tidak Pernah Scan</div><div id="never" class="num">0</div></div>
   <div class="card"><div class="label">Belum Terdaftar</div><div id="unreg" class="num">0</div></div>
  </div>
  <div class="grid">
-  <div class="panel"><h2>Ringkasan Faktor Q1–Q10</h2><div id="factors" class="chart" style="height:auto;display:block;text-align:left">Belum ada data.</div></div>
+  <div class="panel"><h2>Analisis Faktor Q1–Q10</h2><div id="factors" class="chart" style="height:auto;display:block;text-align:left">Belum ada data.</div></div>
   <div class="panel"><h2>Partisipasi Retailer</h2><div class="chart" style="height:300px"><canvas id="participationChart"></canvas></div><div id="participationLegend" style="font-size:13px;color:var(--muted);text-align:center"></div></div>
  </div>
  <div class="panel"><h2>Retailer Response</h2><div id="table" class="tablewrap">Belum ada data.</div></div>
+ <div class="panel"><h2>Analisis Kendala Utama</h2><div id="obstacles" style="font-size:14px">Belum ada data.</div></div>
 </section>
 
 <section id="input" class="page">
@@ -103,7 +109,7 @@ table{min-width:640px}
     <div class="field"><label>Kategori Kios *</label><select name="kategori" required><option value="">Pilih</option><option>Kios R2</option><option>Kios R1</option></select></div>
     <div class="field"><label>Komoditas Utama *</label><select name="komoditas" required><option value="">Pilih</option><option>Padi</option><option>Jagung</option><option>Hortikultura</option><option>Other</option></select></div>
     <div class="field"><label>Komoditas Lainnya</label><input name="otherCommodity"></div>
-    <div class="field full"><label>Status Rewards Plus *</label><select name="status" required><option value="">Pilih</option><option>Aktif & Rutin Scan Poin</option><option>Terdaftar tetapi Jarang/Tidak Pernah Scan</option><option>Belum Terdaftar</option></select></div>
+    <div class="field full"><label>Status Rewards Plus *</label><select name="status" required><option value="">Pilih</option><option>Aktif & Rutin Scan Poin</option><option>Terdaftar tetapi Jarang Scan</option><option>Terdaftar Tidak Pernah Scan</option><option>Belum Terdaftar</option></select></div>
    </div>
   </div>
 
@@ -116,7 +122,7 @@ table{min-width:640px}
   <div class="section"><h2>5. Loyalty Kompetitor</h2>
    <div class="row">
     <div class="field"><label>Ikut Loyalty Kompetitor? *</label><select name="competitor" id="competitor" required><option value="">Pilih</option><option>Ya</option><option>Tidak</option></select></div>
-    <div class="field"><label>Kompetitor</label><select name="competitorName"><option value="">Pilih</option><option>Syngenta</option><option>Corteva</option><option>FMC</option><option>Other</option></select></div>
+    <div class="field"><label>Kompetitor</label><input type="hidden" name="competitorName" id="competitorName"><div class="multi-check" id="competitorChoices"><label class="check-chip"><input type="checkbox" value="Syngenta"> Syngenta</label><label class="check-chip"><input type="checkbox" value="Corteva"> Corteva</label><label class="check-chip"><input type="checkbox" value="FMC"> FMC</label><label class="check-chip"><input type="checkbox" value="BASF"> BASF</label><label class="check-chip"><input type="checkbox" value="MKD"> MKD</label><label class="check-chip"><input type="checkbox" value="Agricon"> Agricon</label><label class="check-chip"><input type="checkbox" value="Other"> Other</label></div><div class="field-hint">Bisa memilih lebih dari 1 kompetitor.</div></div>
     <div class="field"><label>Perbandingan</label><select name="competitorCompare"><option value="">Pilih</option><option>Jauh lebih menguntungkan Bayer</option><option>Sama saja</option><option>Program kompetitor lebih menarik</option></select></div>
     <div class="field"><label>Alasan Perbandingan</label><textarea name="competitorReason"></textarea></div>
    </div>
@@ -139,6 +145,13 @@ table{min-width:640px}
 <button type="button" class="mobile-nav-item" id="mobileRefresh">↻<span>Refresh</span></button>
 </nav>
 <div id="toast"></div>
+<div id="modal" class="modal" aria-hidden="true">
+ <div class="modal-backdrop" onclick="closeModal()"></div>
+ <div class="modal-card">
+  <div class="modal-head"><div><div id="modalTitle" class="modal-title">Detail Retailer</div><div id="modalSubtitle" class="modal-subtitle"></div></div><button class="modal-close" type="button" onclick="closeModal()">×</button></div>
+  <div id="modalBody"></div>
+ </div>
+</div>
 
 <script>
 const API="https://script.google.com/macros/s/AKfycbymCe-zK_WCmU_nkw2DVB6KS7Cy3SEUPyw8KRUnZ_XHvwTP9chE9TigzAnHeuWzrJts/exec";
@@ -168,28 +181,110 @@ function showPage(p){
 function toast(msg,ok=true){const t=$("toast");t.textContent=msg;t.className=ok?"success":"error";t.style.display="block";setTimeout(()=>t.style.display="none",3500)}
 function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
 let participationChart=null;
-function interpretation(s){if(s>=4.5)return "Sangat positif";if(s>=4)return "Positif";if(s>=3)return "Cukup positif";if(s>=2)return "Perlu perhatian";return "Rendah";}
+let currentResponses=[];
+const questionLabels=questions.map(q=>q.replace(/^Q\d+\.\s*/,''));
+function concernInfo(score){
+ if(score<3) return {label:'KONSEN',cls:'high'};
+ if(score<3.5) return {label:'Perlu perhatian',cls:'watch'};
+ return {label:'Relatif baik',cls:'ok'};
+}
+function statusCounts(d){return {
+ active:d.filter(x=>x.status==='Aktif & Rutin Scan Poin').length,
+ rare:d.filter(x=>x.status==='Terdaftar tetapi Jarang Scan').length,
+ never:d.filter(x=>x.status==='Terdaftar Tidak Pernah Scan').length,
+ oldPassive:d.filter(x=>x.status==='Terdaftar tetapi Jarang/Tidak Pernah Scan').length,
+ unreg:d.filter(x=>x.status==='Belum Terdaftar').length
+};}
 function makeAIInsight(d){
- if(!d.length){$("factors").textContent="Belum ada data.";return;}
- const scores=Array.from({length:10},(_,i)=>{const a=d.map(x=>Number(x.q?.[i])).filter(Number.isFinite);return a.length?a.reduce((s,v)=>s+v,0)/a.length:0;});
- const groups=[["Economic Value",0,4],["Tech & Usability",4,7],["Demand & Field Force",7,10]];
- const gs=groups.map(g=>{const a=scores.slice(g[1],g[2]).filter(x=>x>0);return {name:g[0],score:a.reduce((s,v)=>s+v,0)/a.length};});
- const ranked=scores.map((score,i)=>({q:i+1,score})).filter(x=>x.score>0);
- const high=[...ranked].sort((a,b)=>b.score-a.score).slice(0,3),low=[...ranked].sort((a,b)=>a.score-b.score).slice(0,3);
- const overall=ranked.reduce((s,x)=>s+x.score,0)/ranked.length;
- $("factors").innerHTML=`<div style="background:#f7f9fc;border:1px solid var(--line);border-radius:12px;padding:15px;margin-bottom:12px"><div style="font-weight:900;color:var(--blue);font-size:15px;margin-bottom:8px">AI Insight Kuesioner</div><div style="font-size:14px;line-height:1.6">Berdasarkan <b>${d.length} response</b>, skor keseluruhan Q1–Q10 adalah <b>${overall.toFixed(2)}/5</b> (${interpretation(overall)}). Skor relatif tinggi: <b>${high.map(x=>`Q${x.q} (${x.score.toFixed(2)})`).join(", ")}</b>. Area yang perlu diperhatikan: <b>${low.map(x=>`Q${x.q} (${x.score.toFixed(2)})`).join(", ")}</b>.</div></div><div style="font-size:14px;line-height:1.55">${gs.map(g=>`<div style="margin:7px 0"><b>${g.name}</b>: ${g.score.toFixed(2)}/5 (${interpretation(g.score)})</div>`).join("")}</div><div style="margin-top:12px;font-size:12px;color:var(--muted)">Ringkasan otomatis berdasarkan skor aktual Q1–Q10.</div>`;
+ if(!d.length){$('factors').textContent='Belum ada data.';return;}
+ const stats=Array.from({length:10},(_,i)=>{
+  const vals=d.map(x=>Number(x.q?.[i])).filter(Number.isFinite);
+  const avg=vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:0;
+  const neg=vals.filter(v=>v<=2).length, neutral=vals.filter(v=>v===3).length, pos=vals.filter(v=>v>=4).length;
+  return {q:i+1,avg,n:vals.length,neg,neutral,pos,negativePct:vals.length?neg/vals.length*100:0,positivePct:vals.length?pos/vals.length*100:0};
+ });
+ const valid=stats.filter(x=>x.n); const overall=valid.reduce((a,x)=>a+x.avg,0)/valid.length;
+ const concerns=[...valid].sort((a,b)=>a.avg-b.avg || b.negativePct-a.negativePct).slice(0,3);
+ const strengths=[...valid].sort((a,b)=>b.avg-a.avg).slice(0,3);
+ const groups=[['Economic Value',0,4],['Tech & Usability',4,7],['Demand & Field Force',7,10]].map(g=>{
+  const arr=valid.filter(x=>x.q>g[1]&&x.q<=g[2]);
+  return {name:g[0],score:arr.reduce((a,x)=>a+x.avg,0)/arr.length};
+ });
+ const status=statusCounts(d);
+ const legacyNote=status.oldPassive?`<div class="muted" style="margin-top:8px">Ada <b>${status.oldPassive}</b> data lama dengan status gabungan “Jarang/Tidak Pernah”. Data ini belum bisa dipisahkan tanpa edit manual karena sumber tidak menyimpan detailnya.</div>`:'';
+ $('factors').innerHTML=`
+ <div class="insight-box"><div class="insight-title">Gambaran umum</div>
+  <div style="font-size:14px;line-height:1.6">Rata-rata Q1–Q10: <b>${overall.toFixed(2)}/5</b>. Fokus analisis diprioritaskan pada pertanyaan dengan skor terendah dan proporsi jawaban 1–2 terbesar.</div>
+  ${legacyNote}
+ </div>
+ <div class="insight-box"><div class="insight-title">Question yang menjadi concern</div>
+  ${concerns.map(x=>`<div style="margin:8px 0"><b>Q${x.q}.</b> ${esc(questionLabels[x.q-1])}<br><span class="concern ${concernInfo(x.avg).cls}">${concernInfo(x.avg).label}</span> <b>${x.avg.toFixed(2)}/5</b> · ${x.negativePct.toFixed(0)}% memberi skor 1–2 · ${x.positivePct.toFixed(0)}% memberi skor 4–5</div>`).join('')}
+ </div>
+ <div style="margin-bottom:12px"><b>Ringkasan per kelompok</b>
+  ${groups.map(g=>`<div class="factor-row"><div class="factor-top"><span>${g.name}</span><span>${g.score.toFixed(2)}/5</span></div><div class="bar"><span style="width:${Math.max(0,Math.min(100,g.score/5*100))}%"></span></div></div>`).join('')}
+ </div>
+ <div><b>Detail Q1–Q10</b>
+  ${stats.map(x=>`<div class="factor-row"><div class="factor-top"><span>Q${x.q}. ${esc(questionLabels[x.q-1])}</span><span>${x.avg?x.avg.toFixed(2):'-'}/5 ${x.avg?`<span class="concern ${concernInfo(x.avg).cls}">${concernInfo(x.avg).label}</span>`:''}</span></div><div class="bar"><span style="width:${x.avg?x.avg/5*100:0}%"></span></div><div class="factor-meta">${x.n} jawaban · Skor 1–2: ${x.negativePct.toFixed(0)}% · Netral: ${(x.n?x.neutral/x.n*100:0).toFixed(0)}% · Skor 4–5: ${x.positivePct.toFixed(0)}%</div></div>`).join('')}
+ </div>
+ <div class="insight-box" style="margin-top:12px"><div class="insight-title">Question dengan skor relatif tinggi</div>${strengths.map(x=>`<div style="margin:5px 0"><b>Q${x.q}</b> — ${x.avg.toFixed(2)}/5</div>`).join('')}</div>`;
+}
+function obstacleCategory(text){
+ const s=String(text||'').toLowerCase();
+ if(!s.trim()) return 'Tidak diisi';
+ if(/scan|qr|struk|upload|aplikasi|app|error|login|internet|sinyal|jaringan|teknis/.test(s)) return 'Aplikasi / scan / teknis';
+ if(/poin|point|nilai|konversi|belanja|transaksi|syarat|minimum/.test(s)) return 'Poin / transaksi';
+ if(/hadiah|reward|katalog|voucher|barang|cashback|insentif/.test(s)) return 'Hadiah / insentif';
+ if(/promo|informasi|info|edukasi|ingat|tidak tahu|kurang paham/.test(s)) return 'Informasi / edukasi / promo';
+ if(/sales|field force|sf|bayer|kunjungan|follow up|diingatkan/.test(s)) return 'Field force / pendampingan';
+ if(/waktu|sibuk|lupa|malas|repot|ribet/.test(s)) return 'Waktu / kebiasaan';
+ return 'Lainnya';
+}
+function renderObstacles(d){
+ const arr=d.map(x=>({text:String(x.obstacle||'').trim(),cat:obstacleCategory(x.obstacle)}));
+ const counts={};arr.forEach(x=>counts[x.cat]=(counts[x.cat]||0)+1);
+ const sorted=Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+ const filled=arr.filter(x=>x.text).length;
+ if(!arr.length){$('obstacles').textContent='Belum ada data.';return;}
+ $('obstacles').innerHTML=`<div class="insight-box"><b>${filled}</b> dari <b>${d.length}</b> retailer mengisi kendala utama. Kategori di bawah dibuat dari kata kunci jawaban terbuka, sehingga berfungsi sebagai <b>indikasi awal</b>, bukan klasifikasi manual final.</div>${sorted.map(([cat,n])=>`<div class="obstacle-card"><div class="obstacle-top"><span>${esc(cat)}</span><span>${n} · ${(n/d.length*100).toFixed(0)}%</span></div><div class="obstacle-bar"><span style="width:${n/d.length*100}%"></span></div></div>`).join('')}<div class="muted" style="font-size:12px;margin-top:10px">Jawaban “Kendala Utama” tetap dapat dibuka satu per satu melalui Detail retailer.</div>`;
 }
 function renderParticipationPie(d){
- const a=d.filter(x=>x.status==="Aktif & Rutin Scan Poin").length,i=d.filter(x=>x.status==="Terdaftar tetapi Jarang/Tidak Pernah Scan").length,u=d.filter(x=>x.status==="Belum Terdaftar").length;
- const ctx=$("participationChart").getContext("2d");if(participationChart)participationChart.destroy();
- participationChart=new Chart(ctx,{type:"pie",data:{labels:["Aktif & Rutin Scan","Terdaftar tetapi Pasif","Belum Terdaftar"],datasets:[{data:[a,i,u]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom"},tooltip:{callbacks:{label:c=>{const pct=d.length?((c.raw/d.length)*100).toFixed(1):0;return ` ${c.label}: ${c.raw} (${pct}%)`;}}}}}});
- $("participationLegend").textContent=`Total ${d.length} retailer · Aktif ${a} · Pasif ${i} · Belum terdaftar ${u}`;
+ const c=statusCounts(d); const labels=['Aktif & Rutin Scan','Terdaftar · Jarang Scan','Terdaftar · Tidak Pernah Scan','Belum Terdaftar']; const vals=[c.active,c.rare,c.never,c.unreg];
+ const ctx=$('participationChart').getContext('2d');if(participationChart)participationChart.destroy();
+ participationChart=new Chart(ctx,{type:'pie',data:{labels,datasets:[{data:vals}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:c=>{const pct=d.length?((c.raw/d.length)*100).toFixed(1):0;return ` ${c.label}: ${c.raw} (${pct}%)`;}}}}}});
+ $('participationLegend').textContent=`Total ${d.length} · Aktif ${c.active} · Jarang ${c.rare} · Tidak pernah ${c.never} · Belum terdaftar ${c.unreg}`;
+}
+function detailItem(label,value,full=false){return `<div class="detail-item${full?' full':''}"><div class="detail-label">${esc(label)}</div><div class="detail-value">${esc(value||'-')}</div></div>`;}
+function openDetail(id){
+ const x=currentResponses.find(r=>String(r.id)===String(id)); if(!x)return;
+ $('modalTitle').textContent=x.kios||'Detail Retailer'; $('modalSubtitle').textContent=`${x.id||'-'} · ${x.lokasi||'-'}`;
+ const qhtml=x.q.map((v,i)=>`<div class="q-detail-row"><b>Q${i+1}</b><div>${esc(questionLabels[i])}</div><div class="score-pill ${Number(v)<3?'score-low':Number(v)<3.5?'score-mid':''}">${Number.isFinite(Number(v))?Number(v):'-'}</div></div>`).join('');
+ $('modalBody').innerHTML=`<div class="detail-grid">${detailItem('Status Rewards Plus',x.status)}${detailItem('Kategori Kios',x.kategori)}${detailItem('Komoditas Utama',x.komoditas)}${detailItem('Lama Beroperasi',x.operatingAge)}${detailItem('Nama Kios / Toko',x.kios)}${detailItem('Lokasi',x.lokasi)}${detailItem('Komoditas Lainnya',x.otherCommodity)}${detailItem('Ikut Loyalty Kompetitor',x.competitor)}${detailItem('Kompetitor',x.competitorName)}${detailItem('Perbandingan',x.competitorCompare)}${detailItem('Alasan Perbandingan',x.competitorReason,true)}${detailItem('Kendala Utama',x.obstacle,true)}${detailItem('Ekspektasi Hadiah',x.desiredReward,true)}${detailItem('Saran',x.suggestion,true)}</div><div class="q-detail"><div style="padding:11px;background:#f7f9fc;font-weight:900">Jawaban Q1–Q10</div>${qhtml}</div><div style="display:flex;justify-content:flex-end;margin-top:14px"><button class="btn primary" type="button" onclick="openEdit('${esc(x.id)}')">✎ Edit Data</button></div>`;
+ $('modal').classList.add('open');$('modal').setAttribute('aria-hidden','false');
+}
+function closeModal(){$('modal').classList.remove('open');$('modal').setAttribute('aria-hidden','true');}
+function inputField(name,label,value,full=false){return `<div class="field${full?' full':''}"><label>${esc(label)}</label><input name="${esc(name)}" value="${esc(value||'')}"></div>`;}
+function openEdit(id){
+ const x=currentResponses.find(r=>String(r.id)===String(id));if(!x)return;
+ $('modalTitle').textContent='Edit Response';$('modalSubtitle').textContent=`${x.id} · perubahan akan disimpan ke Google Sheets`;
+ const opts=(values,current)=>values.map(v=>`<option ${v===current?'selected':''}>${esc(v)}</option>`).join('');
+ const qhtml=x.q.map((v,i)=>`<div class="q"><div class="qtext">${esc(questions[i])}</div><div class="scale">${[1,2,3,4,5].map(n=>`<label><input type="radio" name="Q${i+1}" value="${n}" ${Number(v)===n?'checked':''} required>${n}</label>`).join('')}</div></div>`).join('');
+ $('modalBody').innerHTML=`<form id="editForm"><input type="hidden" name="response_id" value="${esc(x.id)}"><div class="section" style="padding:0;border:0"><div class="row">${inputField('kios','Nama Kios / Toko',x.kios)}${inputField('lokasi','Lokasi',x.lokasi)}<div class="field"><label>Lama Beroperasi</label><select name="operatingAge">${opts(['< 3 tahun','3–5 tahun','> 5 tahun'],x.operatingAge)}</select></div><div class="field"><label>Kategori Kios</label><select name="kategori">${opts(['Kios R2','Kios R1'],x.kategori)}</select></div><div class="field"><label>Komoditas Utama</label><select name="komoditas">${opts(['Padi','Jagung','Hortikultura','Other'],x.komoditas)}</select></div>${inputField('otherCommodity','Komoditas Lainnya',x.otherCommodity)}<div class="field full"><label>Status Rewards Plus</label><select name="status">${opts(['Aktif & Rutin Scan Poin','Terdaftar tetapi Jarang Scan','Terdaftar Tidak Pernah Scan','Belum Terdaftar','Terdaftar tetapi Jarang/Tidak Pernah Scan'],x.status)}</select></div></div></div><div class="section" style="padding:12px 0;border:0"><h2 style="margin-bottom:4px">Q1–Q10</h2>${qhtml}</div><div class="section" style="padding:0;border:0"><div class="row"><div class="field"><label>Ikut Loyalty Kompetitor</label><select name="competitor">${opts(['Ya','Tidak'],x.competitor)}</select></div><div class="field"><label>Kompetitor</label><input type="hidden" name="competitorName" id="editCompetitorName"><div class="multi-check" id="editCompetitorChoices">${['Syngenta','Corteva','FMC','BASF','MKD','Agricon','Other'].map(v=>`<label class="check-chip"><input type="checkbox" name="competitorChoice" value="${esc(v)}" ${String(x.competitorName||'').split(',').map(s=>s.trim()).includes(v)?'checked':''}> ${esc(v)}</label>`).join('')}</div><div class="field-hint">Bisa memilih lebih dari 1 kompetitor.</div></div>${inputField('competitorCompare','Perbandingan',x.competitorCompare)}<div class="field full"><label>Alasan Perbandingan</label><textarea name="competitorReason">${esc(x.competitorReason)}</textarea></div><div class="field full"><label>Kendala Utama</label><textarea name="obstacle">${esc(x.obstacle)}</textarea></div><div class="field full"><label>Ekspektasi Hadiah</label><textarea name="desiredReward">${esc(x.desiredReward)}</textarea></div><div class="field full"><label>Saran</label><textarea name="suggestion">${esc(x.suggestion)}</textarea></div></div></div><div class="actions" style="position:sticky;bottom:0"><button type="button" class="btn secondary" onclick="openDetail('${esc(x.id)}')">Batal</button><button class="btn primary" type="submit" id="saveEditBtn">Simpan Perubahan</button></div></form>`;
+ $('editForm').addEventListener('submit',saveEdit); 
+}
+async function saveEdit(e){
+ e.preventDefault();const f=e.target,b=$('saveEditBtn');b.disabled=true;b.textContent='Menyimpan...';
+ const body=new URLSearchParams();body.append('action','update');
+ new FormData(f).forEach((v,k)=>{if(k!=="competitorChoice" && k!=="competitorName") body.append(k,v);});
+ body.append('competitorName',[...f.querySelectorAll('input[name="competitorChoice"]:checked')].map(el=>el.value).join(', '));
+ try{const r=await fetch(API,{method:'POST',body});const j=await r.json();if(!j.ok)throw Error(j.error||'Gagal memperbarui');toast('Response berhasil diperbarui.',true);closeModal();await loadDashboard(false);}catch(err){toast('Gagal memperbarui response.',false);console.error(err)}finally{b.disabled=false;b.textContent='Simpan Perubahan';}
 }
 function renderDashboard(d){
- $("total").textContent=d.length;$("active").textContent=d.filter(x=>x.status==="Aktif & Rutin Scan Poin").length;$("inactive").textContent=d.filter(x=>x.status==="Terdaftar tetapi Jarang/Tidak Pernah Scan").length;$("unreg").textContent=d.filter(x=>x.status==="Belum Terdaftar").length;
- if(!d.length){$("factors").textContent="Belum ada data.";$("participationLegend").textContent="Belum ada data.";$("table").textContent="Belum ada data.";if(participationChart){participationChart.destroy();participationChart=null;}return;}
- makeAIInsight(d);renderParticipationPie(d);
- $("table").innerHTML=`<table><thead><tr><th>Kios</th><th>Lokasi</th><th>Kategori</th><th>Komoditas</th><th>Status</th></tr></thead><tbody>${d.map(x=>`<tr><td>${esc(x.kios)}</td><td>${esc(x.lokasi)}</td><td>${esc(x.kategori)}</td><td>${esc(x.komoditas)}</td><td>${esc(x.status)}</td></tr>`).join("")}</tbody></table>`;
+ currentResponses=d||[];
+ const c=statusCounts(d);
+ $('total').textContent=d.length;$('active').textContent=c.active;$('rare').textContent=c.rare;$('never').textContent=c.never;$('unreg').textContent=c.unreg;
+ if(!d.length){$('factors').textContent='Belum ada data.';$('participationLegend').textContent='Belum ada data.';$('table').textContent='Belum ada data.';$('obstacles').textContent='Belum ada data.';if(participationChart){participationChart.destroy();participationChart=null;}return;}
+ makeAIInsight(d);renderParticipationPie(d);renderObstacles(d);
+ $('table').innerHTML=`<table><thead><tr><th>Kios</th><th>Lokasi</th><th>Kategori</th><th>Komoditas</th><th>Status</th><th>Action</th></tr></thead><tbody>${d.map(x=>`<tr><td><b>${esc(x.kios)}</b><div class="muted" style="font-size:11px">${esc(x.id)}</div></td><td>${esc(x.lokasi)}</td><td>${esc(x.kategori)}</td><td>${esc(x.komoditas)}</td><td>${esc(x.status)}</td><td class="action-cell"><button class="mini-btn detail" onclick="openDetail('${esc(x.id)}')">Detail</button><button class="mini-btn edit" onclick="openEdit('${esc(x.id)}')">Edit</button></td></tr>`).join('')}</tbody></table>`;
 }
 async function loadDashboard(showToast=false){
  const b=$("refreshBtn");if(b){b.disabled=true;b.textContent="↻ Loading...";}
@@ -201,7 +296,8 @@ function refreshDashboard(){loadDashboard(true);}
 $("form").addEventListener("submit",async e=>{
  e.preventDefault();const f=e.target;const btn=$("submitBtn");btn.disabled=true;btn.textContent="Mengirim...";
  const fd=new FormData(f), payload={action:"submit"};
- fd.forEach((v,k)=>payload[k]=v);
+ fd.forEach((v,k)=>{if(k!=="competitorChoice") payload[k]=v;});
+ payload.competitorName=[...f.querySelectorAll('input[name="competitorChoice"]:checked')].map(el=>el.value).join(', ');
  payload.q=[1,2,3,4,5,6,7,8,9,10].map(n=>Number(payload["Q"+n]));
  try{
   const body=new URLSearchParams();
